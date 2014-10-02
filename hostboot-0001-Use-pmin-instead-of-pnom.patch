@@ -1,0 +1,33 @@
+From 1da2a7afcc7bf0c1313971d6f14cb7bdb4765ffc Mon Sep 17 00:00:00 2001
+From: Patrick Williams <iawillia@us.ibm.com>
+Date: Thu, 2 Oct 2014 08:20:20 -0500
+Subject: [PATCH] Use pmin instead of pnom.
+
+Change-Id: I2faab2be2c800b68fb47b39a9aecc523942a7629
+---
+ src/usr/hwpf/hwp/pstates/pstates/proc_set_max_pstate.C | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/usr/hwpf/hwp/pstates/pstates/proc_set_max_pstate.C b/src/usr/hwpf/hwp/pstates/pstates/proc_set_max_pstate.C
+index 73032a1..b4ac01c 100755
+--- a/src/usr/hwpf/hwp/pstates/pstates/proc_set_max_pstate.C
++++ b/src/usr/hwpf/hwp/pstates/pstates/proc_set_max_pstate.C
+@@ -71,12 +71,13 @@ fapi::ReturnCode proc_set_max_pstate(const fapi::Target& i_proc_target)
+     sys_freq_nom *= 1000; // Convert to khz.
+ 
+     // Get the pstate closest to nominal frequency.
+-    if (freq2pState(&pss.gpst, sys_freq_nom, &pnom))
++    /*if (freq2pState(&pss.gpst, sys_freq_nom, &pnom))
+     {
+         // Failed to find a frequency.  Use pmin.
+         FAPI_ERR("Unable to find a frequency closest to nominal.  Using pmin.");
+         pnom = gpst_pmin(&pss.gpst);
+-    }
++    }*/
++    pnom = gpst_pmin(&pss.gpst);
+ 
+     freq_nom_khz = (pss.gpst.pstate0_frequency_khz +
+             pss.gpst.frequency_step_khz * pnom);
+-- 
+2.1.1
+
